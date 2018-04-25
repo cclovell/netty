@@ -20,9 +20,10 @@ public class NettyServerHandler extends SimpleChannelInboundHandler {
 
         }
 
-        logger.info("server receive chatMessage : " + chatMessage.getMessage());
-        chatMessage.setMessage("hallow client");
+        logger.info("server receive chatMessage content : " + chatMessage.getContent());
+        logger.info("server receive chatMessage receiveId: " + chatMessage.getReceiveId());
 
-        channelHandlerContext.writeAndFlush(chatMessage);
+//        chatMessage.setContent("server response");
+//        channelHandlerContext.writeAndFlush(chatMessage);
     }
 }

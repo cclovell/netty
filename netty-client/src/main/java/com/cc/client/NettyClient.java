@@ -16,6 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import java.util.UUID;
+
 /**
  * Created by Administrator on 2018/4/12.
  */
@@ -48,11 +50,15 @@ public class NettyClient  {
                     for(int i=0; i<1; i++){
 
                         ChatMessage chatMessage = new ChatMessage();
-                        chatMessage.setId(1);
-                        chatMessage.setMessage("hallow server");
+                        chatMessage.setReceiveId("1");
 
+                        chatMessage.setId(UUID.randomUUID().toString().replace("-", "").toLowerCase());
+                        logger.info("generate messageId : " + chatMessage.getId() );
+                        chatMessage.setContent("hallow server");
+                        chatMessage.setVersion("1.0.1");
 
                         future.channel().writeAndFlush(chatMessage);
+                        logger.info("发送第" + i + "条消息完毕");
                     }
                     logger.info("发送消息完毕");
                 }

@@ -20,6 +20,6 @@ public class ClientHandler extends SimpleChannelInboundHandler {
 
         }
 
-        logger.info("chatMessage : " + chatMessage.getMessage());
+        logger.info("chatMessage : " + chatMessage.getContent());
     }
 }
