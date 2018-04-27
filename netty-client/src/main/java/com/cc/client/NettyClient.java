@@ -47,10 +47,14 @@ public class NettyClient  {
                 logger.info("client connect host:{}, port:{}", ip, port);
                 if (future.channel().isActive()) {
                     logger.info("开始发送消息");
-                    for(int i=0; i<1; i++){
+                    for(int i=0; i<10; i++){
 
                         ChatMessage chatMessage = new ChatMessage();
-                        chatMessage.setReceiveId("1");
+                        String receiveId = String.valueOf(i);
+                        if (receiveId.length() < 5){
+                            receiveId = String.format("%05d",i);
+                        }
+                        chatMessage.setReceiveId(receiveId);
 
                         chatMessage.setId(UUID.randomUUID().toString().replace("-", "").toLowerCase());
                         logger.info("generate messageId : " + chatMessage.getId() );

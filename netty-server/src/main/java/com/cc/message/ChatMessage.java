@@ -43,10 +43,11 @@ public class ChatMessage extends Message implements Serializable {
 
     @Override
     public ChatMessage decode(ByteBuf byteBuf) {
-        byte[] receiveIdByte = new byte[1];
+        int bodyLength = byteBuf.readInt();
+        byte[] receiveIdByte = new byte[5];
         byteBuf.readBytes(receiveIdByte);
         this.receiveId = new String(receiveIdByte);
-        byte[] contentByte = new byte[byteBuf.readableBytes()];
+        byte[] contentByte = new byte[bodyLength - 5 ];
         byteBuf.readBytes(contentByte);
         this.content = new String(contentByte);
         return this;

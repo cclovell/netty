@@ -18,32 +18,44 @@ public class Decoder extends ByteToMessageDecoder {
     private final static Logger logger = LoggerFactory.getLogger(Decoder.class);
     @Override
     protected void decode(ChannelHandlerContext channelHandlerContext, ByteBuf byteBuf, List<Object> list) throws Exception {
-        byteBuf.markReaderIndex();
 //        byteBuf.
         logger.info("message readableBytes : " + byteBuf.readableBytes());
 
-        byte[] messageId = new byte[32];
-        byteBuf.readBytes(messageId);
-        logger.info("message id : " + new String(messageId));
-        byte[] version = new byte[5];
-        byteBuf.readBytes(version);
-        logger.info("message version : " + new String(version));
+        while (true){
 
-        int bodyLength = byteBuf.readInt();
-        logger.info("body length is : " + bodyLength);
+            if (byteBuf.readableBytes() < 37){
+                break;
+            }
+
+            byte[] messageId = new byte[32];
+            byteBuf.readBytes(messageId);
+            logger.info("message id : " + new String(messageId));
+            byte[] version = new byte[5];
+            byteBuf.readBytes(version);
+            logger.info("message version : " + new String(version));
+
+
 
 //        byte[] body = new byte[bodyLength];
 //        byteBuf.readBytes(body);
 
-        ChatMessage chatMessage = new ChatMessage();
-        chatMessage = chatMessage.decode(byteBuf);
+            int remainLengh = byteBuf.readableBytes();
+            logger.info("message remain readableBytes : " + remainLengh);
 
-        logger.info("content : " + chatMessage.getContent());
-        logger.info("receive id  : " + chatMessage.getReceiveId());
 
-        chatMessage.setVersion(version.toString());
-        chatMessage.setId(messageId.toString());
 
-        list.add(chatMessage);
+            ChatMessage chatMessage = new ChatMessage();
+            chatMessage = chatMessage.decode(byteBuf);
+
+            logger.info("content : " + chatMessage.getContent());
+            logger.info("receive id  : " + chatMessage.getReceiveId());
+
+            chatMessage.setVersion(version.toString());
+            chatMessage.setId(messageId.toString());
+
+            list.add(chatMessage);
+        }
+
+
     }
 }
